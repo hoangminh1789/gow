@@ -11,7 +11,6 @@ namespace GOW
         [SerializeField] Team _team = Team.Team1;
         [SerializeField] Transform _centerAnchor;
         [SerializeField] Transform _weaponAnchor;
-        [SerializeField] Transform _cube;
         
         void Awake()
         {
@@ -49,9 +48,8 @@ namespace GOW
 
         public UnityEvent<Character> OnDead { get; } = new UnityEvent<Character>();
 
-        public void Visible(bool visible)
+        public void SetVisible(bool visible)
         {
-            _cube?.SetActive(! visible);
             Graphic.SetActive( visible );
         }
         

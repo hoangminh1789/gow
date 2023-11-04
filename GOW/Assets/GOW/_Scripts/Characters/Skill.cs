@@ -8,8 +8,10 @@ namespace GOW
     {
         [SerializeField] List<SkillModel> _manualSkillModels = new List<SkillModel>();
         [SerializeField] List<SkillModel> _skillModels = new List<SkillModel>();
-
-        int _index = 0;
+        [SerializeField] float _delay = 0.0f;
+        
+        int     _index  = 0;
+        float   _tick   = 0;
         
         void Awake()
         {
@@ -18,11 +20,15 @@ namespace GOW
         
         void Start()
         {
-
+            for (int i = 0; i < _skillModels.Count; ++i)
+            {
+                _skillModels[i].DiffuseInterval();
+            }
         }
 
         public Character ThisChar { get; private set; } = null;
-
+        public bool CanUseSkill => _tick >= _delay;
+        
         public SkillModel AutoSkillModel
         {
             get
@@ -47,11 +53,20 @@ namespace GOW
         public void UseSkill(SkillModel model)
         {
             _index++;
+            _tick = 0;
+            
             model.Use();
         }
         
         void Update()
         {
+            _tick += Time.deltaTime;
+            
+            for (int i = 0, n = _manualSkillModels.Count; i < n; ++i)
+            {
+                _manualSkillModels[i].Tick(Time.deltaTime);
+            }
+            
             for (int i = 0, n = _skillModels.Count; i < n; ++i)
             {
                 _skillModels[i].Tick(Time.deltaTime);

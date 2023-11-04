@@ -13,6 +13,7 @@ namespace GOW
         Battle      _battle             = null;
         Character   _lockedTarget       = null;
         SkillModel  _currentSkillModel  = null;
+        MovePattern _movePattern        = null;
         
         void Awake()
         {
@@ -21,7 +22,8 @@ namespace GOW
         
         void Start()
         {
-            _battle = Battle.Instance;
+            _battle         = Battle.Instance;
+            _movePattern    = GetComponent<MovePattern>();
         }
 
         public Character ThisChar       { get; private set; } = null;
@@ -30,11 +32,8 @@ namespace GOW
         void Update()
         {
             Skill       skill       = ThisChar.Skill;
-            Team        myTeam      = ThisChar.Team;
-            Team        opTeam      = myTeam.Opposite();
             SkillModel  skillModel  = skill.AutoSkillModel;
             float       attackRange = skillModel.AttackRange;
-            float       sqrAtkRange = attackRange * attackRange;
 
             _currentSkillModel = skillModel;
             
@@ -58,26 +57,74 @@ namespace GOW
                 _lockedTarget = FindClosetTarget(_approachRange > attackRange ? _approachRange : attackRange);
             }
 
-            if (_lockedTarget != null)
+            if (ThisChar.Graphic.IsAttacking == false)
             {
-                //in range attack
-                if (IsInRange(_lockedTarget, attackRange))
+                if (CanAttack(attackRange, skillModel))
                 {
-                    if (ThisChar.Graphic.IsAttacking == false && skillModel.IsReady)
-                    {
-                        ThisChar.Attack(skillModel, _lockedTarget);
-                        skill.UseSkill(skillModel);
-                    }
+                    ThisChar.Attack(skillModel, _lockedTarget);
+                    skill.UseSkill(skillModel);
                 }
-                else if(_approachRange > 0)
+                else if (CanApproach())
                 {
                     Vector3 direction = _lockedTarget.Position - ThisChar.Position;
-                    
+
                     ThisChar.Movement.Move(direction.normalized);
+                } 
+                else if (CanMoveFollowPattern())
+                {
+                    Vector3 direction = _movePattern.TargetPosition - ThisChar.Position;
+                    
+                    ThisChar.Movement.Move(direction.normalized, 0.4f);
                 }
             }
         }
 
+        bool CanAttack(float attackRange, SkillModel model)
+        {
+            if (_lockedTarget != null)
+            {
+                if (IsInRange(_lockedTarget, attackRange))
+                {
+                    if (ThisChar.Graphic.IsAttacking == false && ThisChar.Skill.CanUseSkill && model.IsReady)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        bool CanApproach()
+        {
+            if(_lockedTarget != null && _approachRange > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        bool CanMoveFollowPattern()
+        {
+            if (_movePattern != null && _movePattern.IsReady)
+            {
+                float sqrRange = Vector3.SqrMagnitude(ThisChar.Position - _movePattern.TargetPosition);
+
+                if (sqrRange > 0.5f)
+                {
+                    return true;
+                }
+                else
+                {
+                    _movePattern.MoveNext();
+                    return false;
+                }
+            }
+
+            return false;
+        }
+        
         bool IsInRange(Character target, float range)
         {
             float sqrRange  = range * range;
@@ -116,18 +163,6 @@ namespace GOW
             return target;
         }
         
-        void FindNearestTarget()
-        {
-            Team        myTeam      = ThisChar.Team;
-            Team        opTeam      = myTeam.Opposite();
-            var         chars       = _battle.GetChars(opTeam);
-
-            for (int i = 0; i < chars.Count; ++i)
-            {
-                
-            }
-        }
-
         void OnDrawGizmos()
         {
             if (_showRangeDebug)

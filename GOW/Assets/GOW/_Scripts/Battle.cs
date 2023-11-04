@@ -17,7 +17,8 @@ namespace GOW
         [SerializeField] [Range(0, 9)] int _count1 = 0;
         [SerializeField] [Range(0, 9)] int _count2 = 0;
         [SerializeField] Transform _tranCharacters = null;
-
+        [SerializeField] bool _culling = true;
+        
         Camera          _mainCamera = null;
         Waves           _waves      = null;
         
@@ -46,9 +47,9 @@ namespace GOW
         void Start()
         {
             int         rand        = Random.Range(0, _refEnemies.Count);
-            GameObject  refEnemy    = _refEnemies[rand];
+            //GameObject  refEnemy    = _refEnemies[rand];
             Character   ally        = CreateObj(_refAlly, Team.Team1);
-            Character   enemy       = CreateObj(refEnemy, Team.Team2);
+            //Character   enemy       = CreateObj(refEnemy, Team.Team2);
 
             _virtualCamera.Follow = ally.transform;
             _virtualCamera.LookAt = ally.transform;
@@ -56,7 +57,7 @@ namespace GOW
             ally.gameObject.AddComponent<KeyInput>();
             
             this.AddChar(ally);
-            this.AddChar(enemy);
+            //this.AddChar(enemy);
             
             _mainCamera = Camera.main;
         }
@@ -89,14 +90,17 @@ namespace GOW
                     GameObject  refEnemy    = _refEnemies[rand];
                     Character   enemy       = CreateObj(refEnemy, Team.Team2);
                     Vector3     pos         = this.RandomAround(sp.transform.position, sp.Range);
-                    
+
                     enemy.transform.position = pos;
                     
                     this.AddChar(enemy);
                 }
             }
-            
-            this.Culling();
+
+            if (_culling)
+            {
+                this.Culling();
+            }
         }
 
         Spawnpoint GetRandomSpawnpoint()
@@ -113,7 +117,17 @@ namespace GOW
         
         public List<Character> GetChars(Team team)
         {
-            return _charByTeam[team];
+            if (_charByTeam.ContainsKey(team))
+            {
+                return _charByTeam[team];
+            }
+            else
+            {
+                List<Character> list = new List<Character>();
+                _charByTeam[team] = list;
+
+                return list;
+            }
         }
         
         void AddChar(Character character)
@@ -172,16 +186,11 @@ namespace GOW
             for (int i = 0; i < _characters.Count; ++i)
             {
                 Character   ch          = _characters[i];
-                Renderer    renderer    = ch.Renderer;
+                Renderer    render    = ch.Renderer;
 
-                if (GeometryUtility.TestPlanesAABB(planes, renderer.bounds))
-                {
-                    ch.Visible(true);
-                }
-                else
-                {
-                    ch.Visible(false);
-                }
+                bool isInCamera = GeometryUtility.TestPlanesAABB(planes, render.bounds);
+                
+                ch.SetVisible(isInCamera);
             }
         }
         

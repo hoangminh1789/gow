@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace GOW
 {
@@ -27,6 +28,11 @@ namespace GOW
         public void Tick(float dt)
         {
             _tick += dt;
+        }
+
+        public void DiffuseInterval()
+        {
+            _interval *= Random.Range(0.8f, 1.2f);
         }
 
         public void Use()

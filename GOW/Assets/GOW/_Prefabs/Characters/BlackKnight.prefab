@@ -111,19 +111,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _manualSkillModels:
-  - _name: Blade
-    _interval: 8
-    _attackRange: 4
+  - _name: Axe
+    _interval: 3
+    _attackRange: 5
     _animTrigger: attack1
     _projectile: {fileID: 8487880508824670964, guid: 0579351fd1c5445f384f8de73216e827, type: 3}
     _affect: {fileID: 0}
   _skillModels:
-  - _name: InvisibleBlade
-    _interval: 0.8
-    _attackRange: 4
+  - _name: Blade_CW
+    _interval: 0.5
+    _attackRange: 5
     _animTrigger: 
     _projectile: {fileID: 8487880508824670964, guid: 01fefc770fff44457b328329dc242bf3, type: 3}
     _affect: {fileID: 0}
+  - _name: Blade_CCW
+    _interval: 0.5
+    _attackRange: 5
+    _animTrigger: 
+    _projectile: {fileID: 8487880508824670964, guid: 72a2dea2690304d84b261b60e4100ee7, type: 3}
+    _affect: {fileID: 0}
+  _delay: 0.2
 --- !u!114 &3563816797474560429
 MonoBehaviour:
   m_ObjectHideFlags: 0

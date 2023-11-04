@@ -37,7 +37,7 @@ namespace GOW
                 SkillModel  skillModel      = ThisChar.Skill.ManualSkillModel;
                 Character   lockedTarget    = ThisChar.Intellegent.LockedTarget;
                     
-                if (skillModel != null)
+                 if (skillModel != null && skillModel.IsReady)
                 {
                     ThisChar.Attack(skillModel, lockedTarget);
                 }

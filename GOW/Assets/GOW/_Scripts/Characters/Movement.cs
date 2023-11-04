@@ -20,11 +20,11 @@ namespace GOW
 
         public Character ThisChar { get; private set; } = null;
 
-        public void Move(Vector3 direction)
+        public void Move(Vector3 direction, float speedModifier = 1.0f)
         {
             if (ThisChar.Graphic.IsAttacking == false)
             {
-                transform.position += _speed * Time.deltaTime * direction;
+                transform.position += (speedModifier * _speed * Time.deltaTime) * direction;
                 
                 this.RotateToDir(direction);
                 ThisChar.Graphic.Run();

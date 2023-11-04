@@ -16,11 +16,13 @@ namespace GOW
 
         protected override void OnInit()
         {
-            transform.SetParent(Attacker.transform, false);
-            //transform.position  = StartPosition;
-            _graphic.SetActive(true);
+            if (Attacker != null)
+            {
+                transform.SetParent(Attacker.transform, false);
+                _graphic.SetActive(true);
             
-            _animator.SetTrigger("play");
+                _animator.SetTrigger("play");
+            }
         }
     }
 }
