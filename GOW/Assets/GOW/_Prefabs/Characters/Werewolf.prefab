@@ -198,6 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _range: 8
   _count: 6
+  _idleTime: 2
   _showDebug: 0
 --- !u!1 &3301183752806376174
 GameObject:
@@ -591,6 +592,14 @@ PrefabInstance:
     - target: {fileID: 5785497811905594239, guid: 4490a140cb3d426dba068c385035e421, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5785497811910807157, guid: 4490a140cb3d426dba068c385035e421, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5785497811910807157, guid: 4490a140cb3d426dba068c385035e421, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5785497811915092149, guid: 4490a140cb3d426dba068c385035e421, type: 3}
       propertyPath: m_Controller

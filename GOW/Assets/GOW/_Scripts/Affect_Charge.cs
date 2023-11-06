@@ -23,13 +23,13 @@ namespace GOW
         {
             yield return new WaitForSeconds(0.07f);
 
-            if (Target.Health.IsAlive)
+            if (Target.IsAlive)
             {
                 Vector3 direction   = (_targetPosition - _attackerPosition).normalized;
 
                 for (int i = 1; i <= 10; ++i)
                 {
-                    Target.transform.position = _targetPosition + direction * _range / 10 * i;
+                    Target.Transform.position = _targetPosition + direction * _range / 10 * i;
 
                     yield return new WaitForSeconds(0.03f);
                 }

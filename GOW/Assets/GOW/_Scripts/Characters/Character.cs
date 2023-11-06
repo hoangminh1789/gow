@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace GOW
 {
-    public class Character : MonoBehaviour
+    public class Character : MonoBehaviour, ICharacter
     {
         [SerializeField] Team _team = Team.Team1;
         [SerializeField] Transform _centerAnchor;
@@ -29,6 +29,7 @@ namespace GOW
 
         }
 
+        public Transform    Transform   => transform;
         public Graphic      Graphic     { get; private set; } = null;
         public Renderer     Renderer    { get; private set; } = null;
         public Movement     Movement    { get; private set; } = null;
@@ -41,6 +42,8 @@ namespace GOW
             get => _team;
             set => _team = value;
         }
+        
+        public  bool IsAlive { get=> this.Health.IsAlive; set{} }
 
         public Vector3 Position         => transform.position;
         public Vector3 WeaponAnchor     => _weaponAnchor.position;
@@ -58,7 +61,7 @@ namespace GOW
             Vector3 targetPosition = target != null ? target.Position : transform.forward * 3;
             Vector3 targetCenter = target != null ? target.CenterAnchor : transform.forward * 3;
             
-            this.Movement.RotateToDir(targetPosition - this.Position);
+            GameUtility.RotateToDirection(transform, targetPosition - this.Position);
 
             if (skillModel.AnimTrigger.IsValid())
             {
@@ -77,7 +80,7 @@ namespace GOW
                 GameObject          prefab      = model.Projectile;
                 GameObject          go          = Instantiate(prefab);
                 Projectile          projectile  = go.GetComponent<Projectile>();
-                ProjectileMovement  movement    = go.GetComponent<ProjectileMovement>();
+                //ProjectileMovement  movement    = go.GetComponent<ProjectileMovement>();
 
                 projectile.Attacker         = this;
                 projectile.Target           = target;
@@ -94,6 +97,14 @@ namespace GOW
                     affect.Attacker = this;
                     affect.Target   = target;
                 }
+                
+                projectile.ExplodeEvent.AddListener((ch, damage) =>
+                {
+                    if (ch != null)
+                    {
+                        ((Character)ch).TakeDamage( damage );
+                    }
+                });
             }
         }
 

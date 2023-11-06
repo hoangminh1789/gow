@@ -27,7 +27,7 @@ namespace GOW
             }
         }
 
-        public bool IsReady => (Time.realtimeSinceStartup - _lastTime > _idleTime);
+        public bool IsReady => (_positions.Count > 0 && Time.realtimeSinceStartup - _lastTime > _idleTime);
         public Vector3 TargetPosition => _positions[_index];
 
         public void MoveNext()

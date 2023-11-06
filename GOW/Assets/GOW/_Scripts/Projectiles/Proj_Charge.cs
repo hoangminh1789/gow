@@ -16,9 +16,9 @@ namespace GOW
 
         protected override void OnInit()
         {
-            if (Attacker != null)
+            if (Attacker != null && Attacker.IsAlive)
             {
-                transform.SetParent(Attacker.transform, false);
+                transform.SetParent(Attacker.Transform, false);
                 _graphic.SetActive(true);
             
                 _animator.SetTrigger("play");

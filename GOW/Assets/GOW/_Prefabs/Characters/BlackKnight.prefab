@@ -157,8 +157,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dc2ec29764044ba5bac60dbee0a81f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHp: 1000
-  _hp: 1000
+  _maxHp: 2000
+  _hp: 2000
 --- !u!54 &3563816797474560427
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -226,6 +226,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3563816797474560416}
     m_Modifications:
+    - target: {fileID: 1802286859452374609, guid: 081006b40189456788e7910500338317, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1802286859452374609, guid: 081006b40189456788e7910500338317, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1802286859456520337, guid: 081006b40189456788e7910500338317, type: 3}
       propertyPath: m_Enabled
       value: 1

@@ -31,13 +31,21 @@ namespace GOW
 
         public State CurrentState => _state;
         public UnityEvent InitializedEvent { get; } = new UnityEvent();
+        public UnityEvent<ICharacter, int>  ExplodeEvent    { get; } = new UnityEvent<ICharacter, int>();
+        public UnityEvent<Projectile>       DeadEvent       { get; } = new UnityEvent<Projectile>();
         
-        public Character    Attacker        { get; set; }
-        public Character    Target          { get; set; }
+        public ICharacter    Attacker       { get; set; }
+        public ICharacter    Target         { get; set; }
         public Vector3      StartPosition   { get; set; }
         public Vector3      EndPosition     { get; set; }
         public Team         Team            { get; set; }
+        public bool         UsePool         { get; set; } = false;
 
+        public void Reset()
+        {
+            _state = State.Init;
+        }
+        
         void Update()
         {
             if (_state == State.Init)
@@ -57,7 +65,10 @@ namespace GOW
 
         protected virtual void OnInit()
         {
-            transform.rotation  = Attacker.transform.rotation;
+            if (Attacker != null && Attacker.IsAlive)
+            {
+                transform.rotation  = Attacker.Transform.rotation;
+            }
             transform.position  = StartPosition;
             
             _graphic.SetActive(true);
@@ -73,11 +84,6 @@ namespace GOW
             _state = State.Completed;
         }
 
-        void ExplodeOnTarget(Character target)
-        {
-            target.TakeDamage( _damage );
-        }
-        
         public void DestroyObject()
         {
             StartCoroutine(DelayDestroy());
@@ -89,17 +95,23 @@ namespace GOW
             {
                 yield return new WaitForSeconds(_delayDestroy);
             }
-            Destroy(gameObject);
+            
+            this.DeadEvent.Invoke(this);
+
+            if (this.UsePool == false)
+            {
+                Destroy(gameObject);
+            }
         }
         
         void OnTriggerEnter(Collider other)
         {
             //Debug.Log("OnTriggerEnter " + other.gameObject.name);
-            Character character = other.gameObject.GetComponent<Character>();
-
+            ICharacter character = other.gameObject.GetComponent<ICharacter>();
+            
             if (character != null && character.Team != this.Team)
             {
-                this.ExplodeOnTarget(character);
+                this.ExplodeEvent.Invoke(character, _damage);
                 this.Complete();
             }
         }

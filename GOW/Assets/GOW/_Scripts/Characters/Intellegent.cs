@@ -45,7 +45,7 @@ namespace GOW
                 }
                 else
                 {
-                    if (IsInRange(_lockedTarget, _approachRange) == false)
+                    if (GameUtility.IsInRange(ThisChar, _lockedTarget, _approachRange) == false)
                     {
                         _lockedTarget = null;
                     }
@@ -64,11 +64,14 @@ namespace GOW
                     ThisChar.Attack(skillModel, _lockedTarget);
                     skill.UseSkill(skillModel);
                 }
-                else if (CanApproach())
+                else if (GameUtility.CanApproach(_lockedTarget, _approachRange))
                 {
-                    Vector3 direction = _lockedTarget.Position - ThisChar.Position;
+                    if (GameUtility.ShouldApproach(ThisChar, _lockedTarget, attackRange))
+                    {
+                        Vector3 direction = _lockedTarget.Position - ThisChar.Position;
 
-                    ThisChar.Movement.Move(direction.normalized);
+                        ThisChar.Movement.Move(direction.normalized);
+                    }
                 } 
                 else if (CanMoveFollowPattern())
                 {
@@ -83,23 +86,13 @@ namespace GOW
         {
             if (_lockedTarget != null)
             {
-                if (IsInRange(_lockedTarget, attackRange))
+                if (GameUtility.IsInRange(ThisChar, _lockedTarget, attackRange))
                 {
                     if (ThisChar.Graphic.IsAttacking == false && ThisChar.Skill.CanUseSkill && model.IsReady)
                     {
                         return true;
                     }
                 }
-            }
-
-            return false;
-        }
-
-        bool CanApproach()
-        {
-            if(_lockedTarget != null && _approachRange > 0)
-            {
-                return true;
             }
 
             return false;
@@ -123,14 +116,6 @@ namespace GOW
             }
 
             return false;
-        }
-        
-        bool IsInRange(Character target, float range)
-        {
-            float sqrRange  = range * range;
-            float sqr       = Vector3.SqrMagnitude(ThisChar.Position - target.Position);
-
-            return sqr <= sqrRange;
         }
         
         Character FindClosetTarget(float range)

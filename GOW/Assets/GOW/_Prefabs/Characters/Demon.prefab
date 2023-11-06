@@ -192,6 +192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _range: 10
   _count: 6
+  _idleTime: 3
   _showDebug: 0
 --- !u!1 &5711272870160627463
 GameObject:
@@ -1142,6 +1143,14 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 715dd9b7d27a940a0980e0df351e8150, type: 2}
+    - target: {fileID: 3891923349466111042, guid: f9178c72301949a28382ec32811051cc, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3891923349466111042, guid: f9178c72301949a28382ec32811051cc, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9178c72301949a28382ec32811051cc, type: 3}
 --- !u!1 &8737097355428579030 stripped

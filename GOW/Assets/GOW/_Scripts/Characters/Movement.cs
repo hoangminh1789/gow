@@ -26,15 +26,9 @@ namespace GOW
             {
                 transform.position += (speedModifier * _speed * Time.deltaTime) * direction;
                 
-                this.RotateToDir(direction);
+                GameUtility.RotateToDirection(transform, direction);
                 ThisChar.Graphic.Run();
             }
-        }
-
-        public void RotateToDir(Vector3 direction)
-        {
-            float angleY = Vector3.SignedAngle(Vector3.forward, direction, Vector3.up);
-            transform.rotation = Quaternion.Euler(0, angleY, 0);
         }
     }
 }

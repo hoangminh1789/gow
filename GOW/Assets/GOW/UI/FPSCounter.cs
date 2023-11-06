@@ -34,7 +34,7 @@ public class FPSCounter : MonoBehaviour
             _tickUpdate = 0;
             
             int fps = Mathf.RoundToInt(_averageFps);
-            _text.text = fps.ToString();
+            _text.text = "FPS: " + fps;
         }
 
         _timeSinceUpdate = 0f;

@@ -10,8 +10,8 @@ namespace GOW
         {
         }
 
-        public Character Attacker   { get; set; }
-        public Character Target     { get; set; }
+        public ICharacter Attacker   { get; set; }
+        public ICharacter Target     { get; set; }
 
     }
 }

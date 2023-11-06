@@ -5,43 +5,16 @@ using UnityEngine;
 
 namespace GOW
 {
-    
-public class Waves : MonoBehaviour
-{
-    [Serializable]
-    public class Wave
-    {
-        public float time;
-        public int amount;
-    }
 
-    [SerializeField] List<Wave> _waves = new List<Wave>();
-    
-    void Start()
+    public class Waves : MonoBehaviour
     {
-        _waves.Sort((a, b) => a.time.CompareTo(b.time));
-    }
+        [SerializeField] List<Wave> _waves = new List<Wave>();
 
-    public Wave GetNextWave(float time)
-    {
-        for (int i = 0; i < _waves.Count; ++i)
+        void Start()
         {
-            if (_waves[i].time <= time)
-            {
-                Wave wave = _waves[i];
-
-                _waves.RemoveAt(i);
-                
-                return wave;
-            }
+            _waves.Sort((a, b) => a.time.CompareTo(b.time));
         }
 
-        return null;
+        public List<Wave> AllWaves { get => _waves; }
     }
-    
-    void Update()
-    {
-        
-    }
-}
 }
